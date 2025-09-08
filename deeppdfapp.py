@@ -12,6 +12,12 @@ from langchain.chains import create_retrieval_chain
 # ---------------------------
 # CONFIG
 # ---------------------------
+import asyncio
+
+try:
+    asyncio.get_running_loop()
+except RuntimeError:
+    asyncio.set_event_loop(asyncio.new_event_loop())
 st.set_page_config(page_title="📄 PDF Q&A Assistant", layout="wide", page_icon="🤖")
 
 # Custom CSS for sticky input and chat style
@@ -73,7 +79,7 @@ if "retrieval_chain" not in st.session_state:
 # ---------------------------
 # APP TITLE
 # ---------------------------
-st.title("📄 Extract PDF for Question")
+st.title("📄 Give answer from your extracted pdf")
 
 # ---------------------------
 # FILE UPLOAD
@@ -134,7 +140,7 @@ for chat in st.session_state.chat_history:  # oldest at top, newest at bottom
 with st.container():
   
     query = st.text_input("💬 Ask your question:", key="chat_input")
-    send = st.button("Send")
+    send = st.button("Result")
     if send:
         if file is None:
             st.warning("⚠️ Please upload a PDF file first.")
@@ -144,4 +150,5 @@ with st.container():
             st.session_state.chat_history.append({"user": query, "bot": answer})
             st.rerun()  # refresh to update chat
     
+
 
