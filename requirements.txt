@@ -1,11 +1,11 @@
 streamlit
-langchain>=0.2.0
-langchain-community>=0.2.0
+langchain
+langchain-community
 langchain-google-genai
 langchain-text-splitters
 faiss-cpu
 PyPDF2
 nest_asyncio
-grpcio==1.62.2
-grpcio-status==1.62.2
-watchdog
+grpcio
+
+
