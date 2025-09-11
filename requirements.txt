@@ -8,7 +8,8 @@ PyPDF2
 pypdf
 nest_asyncio
 grpcio
-openai
+langchain-openai
+
 
 
 
