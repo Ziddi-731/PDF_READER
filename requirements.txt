@@ -9,6 +9,7 @@ pypdf
 nest_asyncio
 grpcio
 langchain-openai
+openai
 
 
 
