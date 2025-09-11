@@ -4,7 +4,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains import create_retrieval_chain
@@ -92,10 +92,11 @@ if file is not None and st.session_state.retrieval_chain is None:
     with open(file_path, "wb") as f:
         f.write(file.getbuffer())
 
-    embeddings = GoogleGenerativeAIEmbeddings(
-        model="models/embedding-001",
-        google_api_key=Google_api
-    )
+    embeddings = OpenAIEmbeddings(
+    model="text-embedding",  # DeepSeek's embedding model
+    api_key="sk-e55bdac1c4ff448aac03abaeb2062140",
+    base_url="https://api.deepseek.com/v1"  # Add /v1
+)
     loader = PyPDFLoader(file_path)
     docs = loader.load()
 
@@ -104,7 +105,11 @@ if file is not None and st.session_state.retrieval_chain is None:
 
     vectors = FAISS.from_documents(final_docs, embeddings)
 
-    llm = ChatGoogleGenerativeAI(model=model, api_key=Google_api)
+    llm = ChatOpenAI(
+    model="deepseek-chat",  # or try "deepseek-chat:32k" for longer context
+    api_key="sk-e55bdac1c4ff448aac03abaeb2062140",
+    base_url="https://api.deepseek.com/v1"  # Add /v1
+)
 
     prompt = ChatPromptTemplate.from_template("""
     Answer the given question based on the provided PDF or context.
@@ -150,5 +155,6 @@ with st.container():
             st.session_state.chat_history.append({"user": query, "bot": answer})
             st.rerun()  # refresh to update chat
     
+
 
 
